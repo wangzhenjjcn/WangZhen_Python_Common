@@ -1,4 +1,6 @@
 @echo off
+chcp 65001
+
 :: Disable command echo to keep the output clean.
 :: 禁用命令回显，保持执行输出的清洁。
 

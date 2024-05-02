@@ -1,4 +1,5 @@
 @echo off
+chcp 65001
 setlocal enabledelayedexpansion
 
 :: Check if 'black' is installed by running it and checking the error level.
@@ -31,7 +32,11 @@ for /R "%SEARCH_DIR%" %%f in (*.py) do (
 
 echo Formatting complete.
 :: 格式化完成。
-echo 格式化完成。
+ 
 
 :end
 endlocal
+
+@pause
+:: Pause the script, waiting for the user to press any key to continue.
+:: 暂停脚本，等待用户按任意键继续。

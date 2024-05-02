@@ -1,4 +1,5 @@
 @echo off
+chcp 65001
 setlocal enabledelayedexpansion
 
 :: Define the directory and default target file.
@@ -40,16 +41,17 @@ if exist "%SCRIPT_DIR%app.py" (
 echo Selected file: %TARGET_FILE%
 :: 显示选中的文件。
 
-:: Configure PyInstaller options.
-:: 配置PyInstaller选项。
-set /P RESPONSE_Y="Overwrite output files without asking (default Y) [Y/N]? 覆盖输出文件，不进行询问（默认Y）[Y/N]? "
+echo Overwrite output files without asking (default Y) [Y/N]? 覆盖输出文件，不进行询问（默认Y）[Y/N]?
+set /P "RESPONSE_Y="
 if /I "!RESPONSE_Y!"=="N" (set "OPTION_Y=") else (set "OPTION_Y=-y")
 
-set /P RESPONSE_F="Create a one-file bundled executable (default Y) [Y/N]? 创建单文件捆绑可执行文件（默认Y）[Y/N]? "
+echo Create a one-file bundled executable (default Y) [Y/N]? 创建单文件捆绑可执行文件（默认Y）[Y/N]?
+set /P "RESPONSE_F="
 if /I "!RESPONSE_F!"=="N" (set "OPTION_F=") else (set "OPTION_F=-F")
 
 set "DEFAULT_NAME=%TARGET_FILE:~0,-3%"
-set /P APP_NAME="Name to assign to the bundled app, default is the filename without extension '%DEFAULT_NAME%': 为捆绑应用程序指定一个名称（默认为文件名 '%DEFAULT_NAME%'）: "
+echo Name to assign to the bundled app, default is the filename without extension '%DEFAULT_NAME%': 为捆绑应用程序指定一个名称（默认为文件名 '%DEFAULT_NAME%'）:
+set /P "APP_NAME="
 if "!APP_NAME!"=="" (set "APP_NAME=%DEFAULT_NAME%")
 
 echo Running PyInstaller with options: %OPTION_Y% %OPTION_F% -n %APP_NAME%
@@ -57,3 +59,7 @@ echo Running PyInstaller with options: %OPTION_Y% %OPTION_F% -n %APP_NAME%
 python -O -m PyInstaller %OPTION_Y% %OPTION_F% -n %APP_NAME% "%SCRIPT_DIR%%TARGET_FILE%"
 
 endlocal
+
+@pause
+:: Pause the script, waiting for the user to press any key to continue.
+:: 暂停脚本，等待用户按任意键继续。
