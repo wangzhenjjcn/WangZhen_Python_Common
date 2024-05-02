@@ -1,11 +1,19 @@
-# Soundwords
-
-
-# Image
-
-
-# AI
-
-
-# python
+numpy
+pandas
+matplotlib
+scikit-learn
+tensorflow
+keras
+flask
+django
+requests
+pyautogui
+paramiko
+psutil
+sqlalchemy
+pymysql
+xlrd
+openpyxl
+beautifulsoup4
+scapy
 black
