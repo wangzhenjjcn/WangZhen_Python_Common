@@ -13,24 +13,31 @@ if exist "%SCRIPT_DIR%app.py" (
     echo Default app.py found.
     echo 找到默认的 app.py 文件。
 ) else (
-    :: Search for any Python file containing 'app' in its name.
-    :: 搜索名字中包含 'app' 的任何Python文件。
+    :: Search for any Python file containing 'app' in its name in current directory and src directory.
+    :: 在当前目录和src目录中搜索名字中包含 'app' 的任何Python文件。
     set "FOUND_APP_FILE=NO"
-    for /R "%SCRIPT_DIR%" %%i in (*app*.py) do (
-        if not !FOUND_APP_FILE! == YES (
-            set "TARGET_FILE=%%~nxi"
-            set "FOUND_APP_FILE=YES"
-            goto FileChecked
+    for %%d in (., src) do (
+        for %%i in (%%d\*app*.py) do (
+            if not !FOUND_APP_FILE! == YES (
+                set "TARGET_FILE=%%~nxi"
+                set "FOUND_APP_FILE=YES"
+                goto FileChecked
+            )
         )
     )
 
-    :: If no such file found, find the first .py file larger than 1KB.
-    :: 如果没有找到这样的文件，寻找第一个大于1KB的.py文件。
+    :: If no such file found, find the first .py file larger than 1KB and contains a main function in current directory and src directory.
+    :: 如果没有找到这样的文件，在当前目录和src目录寻找第一个大于1KB且包含主函数的.py文件。
     if not !FOUND_APP_FILE! == YES (
-        for /R "%SCRIPT_DIR%" %%j in (*.py) do (
-            if %%~zj GTR 1024 (
-                set "TARGET_FILE=%%~nxj"
-                goto FileFound
+        for %%d in (., src) do (
+            for %%j in (%%d\*.py) do (
+                if %%~zj GTR 1024 (
+                    findstr /C:"if __name__ == \"__main__\":" "%%j" >nul
+                    if !errorlevel! == 0 (
+                        set "TARGET_FILE=%%~nxj"
+                        goto FileFound
+                    )
+                )
             )
         )
     )
